@@ -5,6 +5,27 @@
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  // Theme toggle (dark/light). Initial theme is set by an inline
+  // head script so there's no flash of the wrong theme on load.
+  var themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function () {
+      var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      var next = isLight ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  }
+
+  // Alt+J jumps to the typing test page (and back).
+  document.addEventListener('keydown', function (e) {
+    if (!e.altKey || e.repeat) return;
+    if (e.key.toLowerCase() !== 'j') return;
+    e.preventDefault();
+    var onTypingPage = /typing-test\.html/.test(window.location.pathname);
+    window.location.href = onTypingPage ? 'index.html' : 'typing-test.html';
+  });
+
   // Reveal-on-scroll
   var revealEls = document.querySelectorAll('.reveal');
   revealEls.forEach(function (el) {
